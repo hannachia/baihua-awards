@@ -1,0 +1,1 @@
+stripe listen --events checkout.session.completed,checkout.session.async_payment_succeeded --forward-to localhost:5000/api/payments/webhook

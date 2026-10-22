@@ -1,0 +1,51 @@
+# Render "Blueprint": describes the API server so Render can create it in one go.
+# Render dashboard > New > Blueprint > pick your GitHub repo > Apply. It then asks for the secret values.
+# (sync: false = Render asks you to type the value; nothing secret is stored in this file.)
+services:
+  - type: web
+    name: baihua-api
+    runtime: node
+    rootDir: server
+    plan: free                  # free plan SLEEPS after 15 idle minutes. Use a paid plan for the live site.
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: JWT_SECRET
+        generateValue: true     # Render makes a long random value for you
+      - key: MONGO_URI          # MongoDB Atlas connection string
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CLIENT_URL         # the website address, e.g. https://baihua-awards.pages.dev  (no slash at the end)
+        sync: false
+      - key: ENTRY_FEES         # price per submission in each currency the entrant can choose
+        value: CNY:600
+      - key: PAYMENT_PROVIDER   # stripe = cards + WeChat Pay, manual = bank transfer you confirm by hand
+        value: manual
+      - key: ALLOW_BANK_TRANSFER  # true = also offer bank transfer next to Stripe
+        value: "false"
+      - key: STRIPE_SECRET_KEY  # use the sk_test_ key while testing
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: RESEND_API_KEY     # optional while testing: empty = sign-in codes appear in the Render logs
+        sync: false
+      - key: MAIL_FROM
+        value: Baihua Awards <onboarding@resend.dev>
+      - key: STORAGE_DRIVER     # Render's disk is erased on every restart, so videos MUST go to cloud storage
+        value: s3
+      - key: S3_ENDPOINT        # https://<account id>.r2.cloudflarestorage.com
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
