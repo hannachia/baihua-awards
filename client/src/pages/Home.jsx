@@ -15,7 +15,7 @@ export default function Home() {
         <div className="wrap hero-grid">
           <div>
             <div className="eyebrow">{t('hero.eyebrow')}</div>
-            <h1 translate="no"><span className="h1-a">{t('hero.t1')}</span><span className="h1-b">{t('hero.t2')}</span></h1>
+            <h1 translate="no"><span className="h1-a">{t('hero.t1')}</span>{t('hero.t2') && <span className="h1-b">{t('hero.t2')}</span>}</h1>
             <p className="h1-sub" translate="no">{t('hero.subtitle')}</p>
             <p className="tag">{t('hero.tag')}</p>
             <p>{t('hero.intro')}</p>
@@ -60,7 +60,7 @@ export default function Home() {
         <div className="wrap">
           <h2 className="sec">{t('cats.title')}</h2>
           <p className="lede">{t('cats.lede')}</p>
-          <div className="cat-grid">
+          <div className={`cat-grid n${event.categories.length}`}>
             {event.categories.map((k) => (
               <article key={k.id} className="cat" style={{ '--c': k.color }}>
                 <h3>{t(`cat.${k.id}.title`)}</h3><p>{t(`cat.${k.id}.text`)}</p>

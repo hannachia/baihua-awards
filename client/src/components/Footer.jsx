@@ -9,7 +9,7 @@ export default function Footer() {
         <div>
           <div className="brand foot-brand" translate="no">
             <span className="seal" aria-hidden="true">百<br />花</span>
-            <span className="brand-text"><b>{t('hero.t1')}</b><small>{t('hero.t2')}</small></span>
+            <span className="brand-text"><b>{t('brand.main')}</b><small>{t('brand.sub')}</small></span>
           </div>
           {t('footer.org')}
         </div>

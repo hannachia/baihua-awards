@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-export const CATEGORIES = ['singing', 'dance', 'calligraphy-painting', 'chinese-chess', 'other'];
+export const CATEGORIES = ['singing', 'dance', 'calligraphy-painting', 'other'];
+// Chinese chess is no longer offered. Old entries keep this value so they still open, save and show up.
+const LEGACY_CATEGORIES = ['chinese-chess'];
 export const PROJECT_TYPES = ['individual', 'duo-ensemble', 'group', 'school'];
 export const STATUSES = ['pending', 'shortlisted', 'rejected', 'awarded'];
 
@@ -9,7 +11,7 @@ const entrySchema = new mongoose.Schema({
   age: { type: Number, required: true, min: 1, max: 120 },
   email: { type: String, required: true, trim: true, lowercase: true },
   phone: { type: String, trim: true },
-  category: { type: String, enum: CATEGORIES, required: true },
+  category: { type: String, enum: [...CATEGORIES, ...LEGACY_CATEGORIES], required: true },
   projectType: { type: String, enum: PROJECT_TYPES, required: true },
   workTitle: { type: String, required: true, trim: true },
   organization: { type: String, trim: true },

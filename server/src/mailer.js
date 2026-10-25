@@ -22,7 +22,7 @@ export function confirmationEmail(entry) {
   const name = entry.name;
   return {
     to: entry.email,
-    subject: 'We received your entry: Dan-Zhong Baihua International Zodiac Award',
+    subject: 'We received your entry: Dan-Zhong International Baihua Award',
     text:
 `Dear ${name},
 
@@ -37,8 +37,7 @@ Preliminary review starts in early December 2026. We will contact you if your en
 
 Please use only the official channels of the Organizing Committee, and beware of impersonators.
 
-Organizing Committee
-Dan-Zhong Baihua International Zodiac Award`
+Dan-Zhong International Baihua Award General Association`
   };
 }
 
@@ -53,7 +52,7 @@ It is valid for 10 minutes. If you did not ask for it, you can ignore this email
 你的登录验证码是 ${code}
 10分钟内有效。如果不是您本人操作，请忽略此邮件。
 
-Dan-Zhong Baihua International Zodiac Award`
+Dan-Zhong International Baihua Award`
   };
 }
 
@@ -62,7 +61,7 @@ export function paymentInstructionsEmail(entry, link) {
   const amount = `${(entry.amount / 100).toFixed(entry.amount % 100 ? 2 : 0)} ${entry.currency || 'CNY'}`;
   return {
     to: entry.email,
-    subject: 'How to pay your entry fee: Dan-Zhong Baihua International Zodiac Award',
+    subject: 'How to pay your entry fee: Dan-Zhong International Baihua Award',
     text:
 `Dear ${entry.name},
 
@@ -83,7 +82,6 @@ We confirm payments by hand, so please allow a few working days. You will get a 
 收款账户和付款说明：${link}
 我们会人工确认收款，请耐心等待几个工作日，确认后会发送邮件通知。
 
-Organizing Committee / 组委会
-Dan-Zhong Baihua International Zodiac Award`
+Dan-Zhong International Baihua Award General Association / 丹中国际百花奖总会`
   };
 }

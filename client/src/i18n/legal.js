@@ -6,7 +6,7 @@ export const legal = {
     privacy: {
       title: 'Privacy policy',
       sections: [
-        ['Who we are', 'This website is run by the Organizing Committee of the Dan-Zhong Baihua International Zodiac Award (the "Committee"). Contact for privacy questions: [official email].'],
+        ['Who we are', 'This website is run by the Dan-Zhong International Baihua Award General Association (the "Committee"). Contact for privacy questions: [official email].'],
         ['What we collect',
           'Entrants: name, age, email, phone (optional), category, work title, organization, instructor, the file you upload, your consent to public display, a guardian\'s consent if you are under 18, and whether your entry fee was paid.',
           'Viewers: your email address, the votes you cast and the comments you write.',
@@ -25,7 +25,7 @@ export const legal = {
       title: 'Terms of entry',
       sections: [
         ['Who can enter', 'Anyone, anywhere, at any age: individuals, duos and ensembles, groups, schools, training institutions and community arts troupes. Entrants under 18 need the consent of a parent or guardian.'],
-        ['Categories and formats', 'Singing and dance: an MP4 video with clear picture and sound, up to 5 minutes (8 minutes for groups). Calligraphy and painting: a high-resolution photo or scan first; finalists send the original or take part in an on-site exhibition. Chinese chess: online or offline matches as announced. Other fields are welcome.'],
+        ['Categories and formats', 'Singing and dance: an MP4 video with clear picture and sound, up to 5 minutes (8 minutes for groups). Calligraphy and painting: a high-resolution photo or scan first; finalists send the original or take part in an on-site exhibition. Other fields are welcome.'],
         ['Content and rights', 'Entries must be wholesome and positive and must not contain illegal or politically sensitive material. You are responsible for the usage rights of your entry, including music, third-party copyright and portrait rights.'],
         ['Your work and our use of it', 'The copyright stays with you. The Committee may use entries for non-commercial purposes such as promotion, exhibition, publication and online display. Entries are shown publicly on this website only if you agree when you register.'],
         ['Entry fee and refunds', 'The entry fee is [amount] CNY per entry, paid by WeChat Pay or card. An entry counts as complete only after the payment is confirmed. Refund policy: [organizers to complete].'],
@@ -42,7 +42,7 @@ export const legal = {
     privacy: {
       title: '隐私政策',
       sections: [
-        ['我们是谁', '本网站由丹中百花国际生肖奖组委会（以下简称“组委会”）运营。隐私相关问题请联系：【官方邮箱】。'],
+        ['我们是谁', '本网站由丹中国际百花奖总会（以下简称“组委会”）运营。隐私相关问题请联系：【官方邮箱】。'],
         ['我们收集什么',
           '参赛者：姓名、年龄、邮箱、电话（选填）、参赛项目、作品名称、所属单位、指导教师、您上传的文件、您对公开展示的同意、未满18岁者的监护人同意，以及报名费是否已支付。',
           '观众：您的邮箱地址、您的投票和您发表的评论。',
@@ -61,7 +61,7 @@ export const legal = {
       title: '参赛条款',
       sections: [
         ['参赛资格', '面向全球不限年龄：个人、双人及组合、团体、学校、培训机构和社区艺术团体均可参加。未满18岁的参赛者需要父母或监护人同意。'],
-        ['参赛项目与格式', '声乐和舞蹈：提交画面和声音清晰的MP4视频，一般不超过5分钟（团体不超过8分钟）。书画：先提交高清照片或扫描件，入围者需邮寄原作或参加现场展览。中国象棋：按通知参加线上或线下比赛。欢迎其他艺术领域的作品。'],
+        ['参赛项目与格式', '声乐和舞蹈：提交画面和声音清晰的MP4视频，一般不超过5分钟（团体不超过8分钟）。书画：先提交高清照片或扫描件，入围者需邮寄原作或参加现场展览。欢迎其他艺术领域的作品。'],
         ['内容与权利', '作品内容须健康向上，不得包含违法或政治敏感内容。参赛者需自行负责作品的使用权，包括音乐、第三方版权和肖像权。'],
         ['您的作品与我们的使用', '作品版权归创作者所有。组委会可将作品用于宣传、展览、出版和网络展示等非商业用途。只有在报名时您同意的情况下，作品才会在本网站公开展示。'],
         ['报名费与退款', '报名费为每件作品【金额】元人民币，可通过微信支付或银行卡支付。支付确认后报名才算完成。退款政策：【由组委会补充】。'],
@@ -69,7 +69,7 @@ export const legal = {
         ['公开投票', '投票需使用邮箱登录。每个人对每件作品只能投一票。禁止刷票、虚假账号和拉票交换。组委会可以删除相关投票并取消相关作品的资格。'],
         ['评论', '请文明发言。禁止仇恨言论、骚扰、垃圾信息和违法内容，组委会可以隐藏任何评论。'],
         ['取消资格', '抄袭、冒名顶替和刷票将被取消资格。'],
-        ['其他', '遇不可抗力，赛程和形式可能调整。丹中百花国际生肖奖组委会保留最终解释权。请只通过组委会的官方渠道联系，谨防冒充。']
+        ['其他', '遇不可抗力，赛程和形式可能调整。丹中国际百花奖总会保留最终解释权。请只通过组委会的官方渠道联系，谨防冒充。']
       ]
     }
   }

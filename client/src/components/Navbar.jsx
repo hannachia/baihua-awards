@@ -39,7 +39,7 @@ export default function Navbar() {
       <div className="wrap nav-in">
         <Link className="brand" to="/" translate="no" onClick={close}>
           <span className="seal" aria-hidden="true">百<br />花</span>
-          <span className="brand-text"><b>{t('hero.t1')}</b><small>{t('hero.t2')}</small></span>
+          <span className="brand-text"><b>{t('brand.main')}</b><small>{t('brand.sub')}</small></span>
         </Link>
         <nav aria-label="Main" className="desk">{links}</nav>
         <div className="nav-right">

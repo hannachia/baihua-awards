@@ -3,8 +3,8 @@
 // Fill in the [brackets]. These details are shown publicly to people who are about to pay,
 // so use the account that is meant for receiving the entry fees.
 export const bank = {
-  beneficiaryName: '[Beneficiary name]',
-  accountNumber: '[Account number]',
+  beneficiaryName: 'Junyong Wang',
+  accountNumber: '6013820800104691',
   bankName: 'Bank of China, Shanghai, Liuzhou Road Sub-Branch',
   bankAddress: 'No.430 Liuzhou Road, Shanghai, China',
   postCode: '200233',

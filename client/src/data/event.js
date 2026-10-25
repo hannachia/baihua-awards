@@ -7,10 +7,9 @@ export const event = {
     { id: 'singing', glyph: '声', color: '#C8102E' },
     { id: 'dance', glyph: '舞', color: '#9C7424' },
     { id: 'calligraphy-painting', glyph: '书', color: '#1F6F6B' },
-    { id: 'chinese-chess', glyph: '棋', color: '#3C5E9A' },
     { id: 'other', glyph: '艺', color: '#7A4A8C' }
   ],
   scheduleCount: 4,
-  awardCount: 3,
+  awardCount: 2,
   criteriaCount: 5
 };
