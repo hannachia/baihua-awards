@@ -16,10 +16,17 @@ const VIDEO_CATS = ['singing', 'dance'];
 const removeFile = (f) => f && fs.unlink(f.path, () => {});
 
 // Public: submit an entry
-r.post('/', submitLimit, upload.single('file'), async (req, res, next) => {
+r.post('/', submitLimit, upload.fields([{ name: 'file', maxCount: 1 }, { name: 'poster', maxCount: 1 }, { name: 'images', maxCount: 8 }]), async (req, res, next) => {
   try {
     const b = req.body;
-    const f = req.file;
+    const f = req.files?.file?.[0];
+    const extras = req.files?.images || [];   // pictures 2 to 9
+    const everyFile = () => [req.files?.file?.[0], req.files?.poster?.[0], ...extras];
+    let p = req.files?.poster?.[0];
+    // The cover picture is a bonus: keep it only if it is a small JPEG, otherwise just ignore it
+    if (p && (p.mimetype !== 'image/jpeg' || p.size > 2 * 1024 * 1024)) { removeFile(p); p = undefined; }
+    const ratioNum = Number(b.ratio);
+    const ratio = Number.isFinite(ratioNum) && ratioNum > 0 ? Math.min(2.5, Math.max(0.4, ratioNum)) : undefined;
     const errors = [];
     const age = Number(b.age);
 
@@ -36,9 +43,20 @@ r.post('/', submitLimit, upload.single('file'), async (req, res, next) => {
     if (VIDEO_CATS.includes(b.category) && f?.mimetype !== 'video/mp4') errors.push('Singing and dance entries need an MP4 video.');
     if (b.category === 'calligraphy-painting' && !(f && f.mimetype !== 'video/mp4')) errors.push('Calligraphy and painting entries need a JPG, PNG or PDF.');
 
-    if (errors.length) { removeFile(f); return res.status(400).json({ errors }); }
+    // Several pictures are only for photo categories, and every extra one must be a JPG or PNG
+    if (extras.length) {
+      const okCategory = ['calligraphy-painting', 'other'].includes(b.category);
+      const okFirst = f && ['image/jpeg', 'image/png'].includes(f.mimetype);
+      const okExtras = extras.every((x) => ['image/jpeg', 'image/png'].includes(x.mimetype));
+      if (!okCategory || !okFirst || !okExtras) errors.push('You can add up to 9 pictures (JPG or PNG).');
+    }
+
+    if (errors.length) { everyFile().forEach(removeFile); return res.status(400).json({ errors }); }
 
     const stored = f ? await saveUploaded(f) : null; // local disk, or cloud storage
+    const storedPoster = p ? await saveUploaded(p) : null;
+    const storedExtras = [];
+    for (const x of extras) storedExtras.push({ originalName: x.originalname, size: x.size, mimetype: x.mimetype, ...(await saveUploaded(x)) });
     const paying = paymentsEnabled();
     const currency = paying ? pickCurrency(b.currency) : undefined; // the entrant chooses; we only accept currencies we offer
     const entry = await Entry.create({
@@ -46,7 +64,8 @@ r.post('/', submitLimit, upload.single('file'), async (req, res, next) => {
       projectType: b.projectType, workTitle: b.workTitle, organization: b.organization,
       instructor: b.instructor, guardianConsent: b.guardianConsent === 'true', publicConsent: true,
       paymentStatus: paying ? 'unpaid' : 'not_required', amount: paying ? feeTable()[currency] : undefined, currency,
-      file: f && { originalName: f.originalname, size: f.size, mimetype: f.mimetype, ...stored }
+      file: f && { originalName: f.originalname, size: f.size, mimetype: f.mimetype, ...stored },
+      poster: p && { mimetype: 'image/jpeg', ...storedPoster }, images: storedExtras, ratio
     });
     if (paying) {
       // The confirmation email is sent after the payment succeeds. Send the visitor to the payment page.
@@ -63,7 +82,7 @@ r.post('/', submitLimit, upload.single('file'), async (req, res, next) => {
     // Email problems must never block a saved entry
     sendMail(confirmationEmail(entry)).catch((err) => console.error(err.message));
     res.status(201).json({ id: entry._id, message: 'Entry received.' });
-  } catch (e) { removeFile(req.file); next(e); }
+  } catch (e) { [req.files?.file?.[0], req.files?.poster?.[0], ...(req.files?.images || [])].forEach(removeFile); next(e); }
 });
 
 // Admin: list with optional filters
@@ -72,7 +91,7 @@ r.get('/', requireAdmin, async (req, res, next) => {
     const q = {};
     if (CATEGORIES.includes(req.query.category)) q.category = req.query.category;
     if (STATUSES.includes(req.query.status)) q.status = req.query.status;
-    const entries = await Entry.find(q).sort({ createdAt: -1 }).select('-file.path');
+    const entries = await Entry.find(q).sort({ createdAt: -1 }).select('-file.path -poster.path -images.path -images.key');
     res.json(entries);
   } catch (e) { next(e); }
 });
@@ -127,6 +146,19 @@ r.patch('/:id/publish', requireAdmin, async (req, res, next) => {
     await e.save();
     res.json({ id: e._id, published: e.published });
   } catch (e) { next(e); }
+});
+
+// Admin: download picture number n of an entry (0 = the main file, 1 and up = the extra pictures)
+r.get('/:id/image/:n', requireAdmin, async (req, res, next) => {
+  try {
+    const e = await Entry.findById(req.params.id);
+    const n = Number(req.params.n);
+    const f = e && Number.isInteger(n) && n >= 0 ? (n === 0 ? e.file : e.images?.[n - 1]) : null;
+    if (!f) return res.status(404).json({ errors: ['No file for this entry.'] });
+    if (f.storage === 's3') return res.json({ url: await getDownloadUrl(f, { download: true }) });
+    if (!f.path || !fs.existsSync(f.path)) return res.status(404).json({ errors: ['No file for this entry.'] });
+    res.download(f.path, f.originalName);
+  } catch (err) { next(err); }
 });
 
 // Admin: download the submitted file

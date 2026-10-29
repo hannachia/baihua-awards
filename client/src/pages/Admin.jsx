@@ -4,6 +4,7 @@ import { api, downloadBlob, getToken, setToken } from '../api.js';
 import { event } from '../data/event.js';
 import { useLang } from '../i18n/LangContext.jsx';
 import { money } from '../money.js';
+import Loader from '../components/Loader.jsx';
 
 const STATUSES = ['pending', 'shortlisted', 'rejected', 'awarded'];
 
@@ -86,7 +87,7 @@ export default function Admin() {
         </div>
       </div>
       {error && <div className="errors">{tr(error)}</div>}
-      {!entries ? <p>{t('admin.loading')}</p> : entries.length === 0 ? <p>{t('admin.empty')}</p> : (
+      {!entries ? <Loader /> : entries.length === 0 ? <p>{t('admin.empty')}</p> : (
         <div className="scroll">
           <table className="atable">
             <thead><tr>{['date', 'name', 'category', 'work', 'contact', 'file', 'payment', 'status', 'public', 'votes'].map((k) => <th key={k}>{th(k)}</th>)}</tr></thead>
@@ -100,7 +101,9 @@ export default function Admin() {
                   <td data-label={th('contact')}><div>{e.email}<br /><small>{e.phone}</small></div></td>
                   <td data-label={th('file')}>{e.file?.originalName
                     ? <button className="link" onClick={() => downloadBlob(`/entries/${e._id}/file`, e.file.originalName)}>{t('admin.download')}</button>
-                    : '—'}</td>
+                    : '—'}{(e.images || []).map((_, k) => (
+                      <button key={k} className="link" style={{ marginLeft: 6 }} onClick={() => downloadBlob(`/entries/${e._id}/image/${k + 1}`, `${e.workTitle}-${k + 2}`)}>#{k + 2}</button>
+                    ))}</td>
                   <td data-label={th('payment')}>{payCell(e)}</td>
                   <td data-label={th('status')}>
                     <select value={e.status} onChange={(ev) => changeStatus(e._id, ev.target.value)} aria-label={`${th('status')}: ${e.name}`}>

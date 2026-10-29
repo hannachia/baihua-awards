@@ -105,8 +105,16 @@ export default function Home() {
         <div className="wrap">
           <h2 className="sec">{t('contact.title')}</h2>
           <dl className="contact">
-            {['email', 'wechat', 'person', 'phone', 'address'].map((k) => (
-              <div key={k}><dt>{t(`contact.${k}`)}</dt><dd>{c[k] || tba}</dd></div>
+            {['email', 'person', 'phone'].map((k) => (
+              <div key={k}>
+                <dt>{t(`contact.${k}`)}</dt>
+                <dd>
+                  {!c[k] ? tba
+                    : k === 'email' ? <a href={`mailto:${c[k]}`}>{c[k]}</a>
+                      : k === 'phone' ? <a href={`tel:${c[k].replace(/\s/g, '')}`}>{c[k]}</a>
+                        : c[k]}
+                </dd>
+              </div>
             ))}
           </dl>
           <p className="warn">{t('contact.warn')}</p>

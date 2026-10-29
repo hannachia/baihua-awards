@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api, getToken, setToken } from '../api.js';
 import { useLang } from '../i18n/LangContext.jsx';
+import Loader from '../components/Loader.jsx';
 
 // Organizer tools for one entry: see who voted, remove suspicious votes, hide comments
 export default function AdminEntry() {
@@ -37,7 +38,7 @@ export default function AdminEntry() {
   }
 
   if (error) return <section className="page"><div className="wrap wide"><div className="errors">{tr(error)}</div><Link to="/admin">{t('ae.back')}</Link></div></section>;
-  if (!data) return <section className="page"><div className="wrap wide"><p>{t('admin.loading')}</p></div></section>;
+  if (!data) return <section className="page"><div className="wrap wide"><Loader /></div></section>;
 
   return (
     <section className="page"><div className="wrap wide">

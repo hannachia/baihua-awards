@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api, getViewerToken } from '../api.js';
 import Media from '../components/Media.jsx';
+import Loader from '../components/Loader.jsx';
 import Related from '../components/Related.jsx';
 import Comments from '../components/Comments.jsx';
 import ShareModal from '../components/ShareModal.jsx';
@@ -81,7 +82,7 @@ export default function Watch() {
   }
 
   if (missing) return <section className="page"><div className="wrap"><p>{t('watch.notfound')}</p><Link to="/gallery">{t('watch.back')}</Link></div></section>;
-  if (!entry) return <section className="page"><div className="wrap"><p>{t('gallery.loading')}</p></div></section>;
+  if (!entry) return <section className="page"><div className="wrap"><Loader /></div></section>;
 
   const open = entry.votingOpen;
   const views = t(entry.viewCount === 1 ? 'watch.view1' : 'watch.views', { n: compact(entry.viewCount, lang) });

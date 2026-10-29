@@ -18,6 +18,11 @@ const entrySchema = new mongoose.Schema({
   instructor: { type: String, trim: true },
   guardianConsent: { type: Boolean, default: false },
   file: { originalName: String, path: String, storage: String, key: String, size: Number, mimetype: String },
+  // Pictures 2 to 9 of an entry with several photos (picture 1 is `file`)
+  images: [{ originalName: String, size: Number, mimetype: String, storage: String, path: String, key: String }],
+  // Small cover picture made in the browser at upload time (a frame of the video, or a shrunken photo)
+  poster: { storage: String, path: String, key: String, mimetype: String },
+  ratio: Number,   // width / height of the work, so the gallery can lay cards out like a photo feed
   paymentStatus: { type: String, enum: ['not_required', 'unpaid', 'paid'], default: 'not_required', index: true },
   paymentRef: String,
   amount: Number,          // in fen (1/100 yuan)

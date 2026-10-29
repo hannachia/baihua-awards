@@ -1,4 +1,8 @@
 export default {
+  'reg.images.hint': 'For photos you can choose up to {n} pictures (JPG or PNG). The first one is the cover.',
+  'reg.file.many': 'You can add up to 9 pictures.', 'reg.file.mix': 'Choose either one video or PDF, or up to 9 pictures (JPG or PNG).',
+  'reg.cover': 'Cover', 'reg.remove': 'Remove',
+  'carousel.prev': 'Previous picture', 'carousel.next': 'Next picture', 'carousel.full': 'Full screen',
   'reg.currency': 'Pay in',
   'manual.title': 'Pay by bank transfer', 'manual.lede': 'Your entry is saved. It counts once we have confirmed your payment.',
   'manual.amount': 'Amount to transfer', 'manual.ref': 'Reference (write this in the transfer remarks)',

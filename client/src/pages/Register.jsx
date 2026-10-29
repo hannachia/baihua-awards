@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, upload } from '../api.js';
-import { fileProblem, acceptFor } from '../fileCheck.js';
+import { filesProblem, acceptFor, MAX_IMAGES } from '../fileCheck.js';
+import PickedImages from '../components/PickedImages.jsx';
+import { makePoster } from '../utils/media.js';
 import { event } from '../data/event.js';
 import { useLang } from '../i18n/LangContext.jsx';
 import { money } from '../money.js';
@@ -14,13 +16,15 @@ const empty = {
 export default function Register() {
   const { t, tr, lang } = useLang();
   const [f, setF] = useState(empty);
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);   // the first one is the main file / cover, the others are extra pictures
+  const file = files[0] || null;
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(null);
   const [cfg, setCfg] = useState({ fees: {}, bankTransfer: false });
   const [currency, setCurrency] = useState('');
   const [pct, setPct] = useState(0);
+  const posterJob = useRef(null); // the cover picture is made while the person fills in the form
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
@@ -36,8 +40,10 @@ export default function Register() {
   const set = (k) => (e) => setF({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
   const minor = f.age !== '' && Number(f.age) < 18;
   const accept = acceptFor(f.category);
-  const problem = fileProblem(file, f.category);
-  const showProblem = problem && (file || tried);
+  const multi = ['calligraphy-painting', 'other'].includes(f.category);
+  const problem = filesProblem(files, f.category);
+  const showProblem = problem && (files.length > 0 || tried);
+  const choose = (list) => { setFiles(list); posterJob.current = makePoster(list[0] || null); };
 
   async function submit(e) {
     e.preventDefault();
@@ -51,6 +57,10 @@ export default function Register() {
     form.append('lang', lang);
     if (currency) form.append('currency', currency);
     if (file) form.append('file', file);
+    files.slice(1).forEach((x) => form.append('images', x));
+    const cover = await (posterJob.current || Promise.resolve(null));
+    if (cover?.blob) form.append('poster', cover.blob, 'poster.jpg');
+    if (cover?.ratio) form.append('ratio', cover.ratio.toFixed(3));
     try {
       const data = await upload('/entries', form, setPct);
       if (data.checkoutUrl) { window.location.href = data.checkoutUrl; return; } // go pay
@@ -121,8 +131,9 @@ export default function Register() {
         </div>
         <label>
           {t('reg.file')}
-          <input type="file" accept={accept} onChange={(e) => setFile(e.target.files[0] || null)} />
-          <small>{t('reg.file.hint')}</small>
+          <input type="file" accept={accept} multiple={multi} onChange={(e) => choose([...e.target.files])} />
+          <small>{t('reg.file.hint')}{multi ? ` ${t('reg.images.hint', { n: MAX_IMAGES })}` : ''}</small>
+          <PickedImages files={files} onRemove={(k) => choose(files.filter((_, j) => j !== k))} />
           {showProblem && <small className="field-error" role="alert">{t(problem)}</small>}
         </label>
         {minor && (

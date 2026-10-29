@@ -1,4 +1,8 @@
 export default {
+  'reg.images.hint': '摄影类作品最多可选择{n}张图片（JPG或PNG），第一张将作为封面。',
+  'reg.file.many': '最多可添加9张图片。', 'reg.file.mix': '请选择一个视频或PDF，或最多9张图片（JPG或PNG）。',
+  'reg.cover': '封面', 'reg.remove': '移除',
+  'carousel.prev': '上一张', 'carousel.next': '下一张', 'carousel.full': '全屏',
   'reg.currency': '支付币种',
   'manual.title': '银行转账付款', 'manual.lede': '您的作品已保存，确认收到付款后报名才算完成。',
   'manual.amount': '转账金额', 'manual.ref': '付款备注（转账时请填写）',
@@ -147,6 +151,7 @@ export default {
   'done.back': '返回首页',
 
   errors: {
+    'You can add up to 9 pictures (JPG or PNG).': '最多可添加9张图片（JPG或PNG）。',
     'Please choose a name of 2 to 30 characters.': '名称长度需为2到30个字符。',
     'This name is not allowed.': '该名称不可用。',
     'You cannot reply to that comment.': '无法回复该评论。',

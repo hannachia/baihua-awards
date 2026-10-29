@@ -32,7 +32,8 @@ function shape(e) {
   return {
     id: e._id, name: display, workTitle: e.workTitle, category: e.category, projectType: e.projectType,
     organization: e.organization, voteCount: e.voteCount, viewCount: e.viewCount || 0,
-    publishedAt: e.publishedAt, mediaType: mediaType(e.file?.mimetype)
+    publishedAt: e.publishedAt, mediaType: mediaType(e.file?.mimetype), ratio: e.ratio || null, hasPoster: !!e.poster?.mimetype,
+    imageCount: mediaType(e.file?.mimetype) === 'image' ? 1 + (e.images?.length || 0) : 0
   };
 }
 
@@ -76,6 +77,34 @@ r.get('/:id', optionalViewer, async (req, res, next) => {
     const st = await reactionState(e._id, req.viewer?.id);
     res.json({ ...shape(e), hasVoted: st.hasVoted, hasDisliked: st.hasDisliked, votingOpen: votingOpen() });
   } catch (e) { next(e); }
+});
+
+// The small cover picture shown on gallery cards and before a video starts
+r.get('/:id/poster', async (req, res, next) => {
+  try {
+    const e = await findPublished(req.params.id);
+    const ph = e?.poster;
+    if (!ph?.mimetype) return res.status(404).end();
+    if (ph.storage === 's3') {
+      res.set('Cache-Control', 'public, max-age=600');
+      return res.redirect(await getDownloadUrl({ key: ph.key, mimetype: ph.mimetype }));
+    }
+    if (!ph.path || !fs.existsSync(ph.path)) return res.status(404).end();
+    res.sendFile(path.resolve(ph.path), { headers: { 'Content-Type': ph.mimetype, 'Cache-Control': 'public, max-age=86400' } });
+  } catch (err) { next(err); }
+});
+
+// Picture number n of an entry with several photos (0 = the first one)
+r.get('/:id/image/:n', async (req, res, next) => {
+  try {
+    const e = await findPublished(req.params.id);
+    const n = Number(req.params.n);
+    const f = e && Number.isInteger(n) && n >= 0 ? (n === 0 ? e.file : e.images?.[n - 1]) : null;
+    if (!f) return res.status(404).end();
+    if (f.storage === 's3') return res.redirect(await getDownloadUrl(f));
+    if (!f.path || !fs.existsSync(f.path)) return res.status(404).end();
+    res.sendFile(path.resolve(f.path), { headers: { 'Content-Type': f.mimetype, 'Cache-Control': 'public, max-age=3600' } });
+  } catch (err) { next(err); }
 });
 
 // The video / image itself. Range requests work, so the video can be scrubbed.

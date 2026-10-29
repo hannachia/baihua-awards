@@ -5,6 +5,7 @@ import { bank, wechatQr } from '../data/payment.js';
 import { event } from '../data/event.js';
 import { useLang } from '../i18n/LangContext.jsx';
 import { money } from '../money.js';
+import Loader from '../components/Loader.jsx';
 
 function CopyBtn({ text }) {
   const { t } = useLang();
@@ -30,7 +31,7 @@ export default function PayManual() {
   }, [entry]);
 
   if (error || !entry) return <section className="page"><div className="wrap narrow"><p>{t('watch.notfound')}</p><Link to="/">{t('pay.back')}</Link></div></section>;
-  if (!info) return <section className="page"><div className="wrap narrow"><p>{t('gallery.loading')}</p></div></section>;
+  if (!info) return <section className="page"><div className="wrap narrow"><Loader /></div></section>;
 
   const rows = [
     ['beneficiary', bank.beneficiaryName], ['account', bank.accountNumber], ['bankname', bank.bankName],

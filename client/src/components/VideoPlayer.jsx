@@ -15,7 +15,7 @@ function fmt(s) {
 // A YouTube-style player: big play button, progress bar with preview time, volume, speed,
 // theater mode, fullscreen, keyboard shortcuts, auto-hiding controls and an "Up next" countdown.
 // Keys: space/K play, ←/→ 5s, J/L 10s, ↑/↓ volume, M mute, F fullscreen, T theater, 0-9 jump.
-export default function VideoPlayer({ src, autoPlay = false, theater = false, onTheater, nextUp }) {
+export default function VideoPlayer({ src, poster, autoPlay = false, theater = false, onTheater, nextUp }) {
   const { t } = useLang();
   const wrap = useRef(null);
   const video = useRef(null);
@@ -125,7 +125,7 @@ export default function VideoPlayer({ src, autoPlay = false, theater = false, on
   return (
     <div ref={wrap} className={'vp' + (visible ? ' show' : '') + (full ? ' full' : '')} tabIndex={0} onKeyDown={onKey}
       onMouseMove={poke} onTouchStart={poke} onMouseLeave={() => { if (playing) setShow(false); }}>
-      <video ref={video} src={`${src}#t=0.1`} playsInline preload="metadata" onClick={toggle} onDoubleClick={toggleFull}
+      <video ref={video} src={`${src}#t=0.1`} poster={poster} playsInline preload="metadata" onClick={toggle} onDoubleClick={toggleFull}
         onPlay={() => { setPlaying(true); setEnded(false); setCancelled(false); poke(); }}
         onPause={() => { setPlaying(false); setShow(true); }}
         onTimeUpdate={(e) => setTime(e.target.currentTime)}
